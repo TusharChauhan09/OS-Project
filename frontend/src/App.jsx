@@ -1,26 +1,24 @@
 import React from "react";
 import NavBar from "./components/NavBar";
-import Home from "./Pages/Home";
+import Home from "./pages/Home";
 import PageReplacementVisualizer from "./pages/PageReplacementVisualizer"
 import Difference from "./pages/Difference";
 import About from './pages/About';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Footer from "./components/Footer";
 
 function App() {
 
   return (
     <>
-      {/* <FIFOPageReplacement/>
-      <LRUPageReplacement /> */}
-      {/* <PageReplacementVisualizer /> */}
       <BrowserRouter>
       <NavBar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/algorithms" element={<PageReplacementVisualizer />} />
+        <Route path="/algorithm" element={<Home />} />
+        <Route path="/" element={<About />} />
         <Route path="/difference" element={<Difference />} />
       </Routes>
+      <Footer />
     </BrowserRouter>  
     </>
   )
