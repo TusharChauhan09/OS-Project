@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import FIFOPageReplacement from "../Algorithms/FIFOPageReplacement";
 import LRUPageReplacement from "../Algorithms/LRUPageReplacement";
 import LFUPageReplacement from "../Algorithms/LFUPageReplacement";
+import OptimalPageReplacement from "../Algorithms/OptimalPageReplacement";
+
 
 const PageReplacementVisualizer = () => {
   const [algorithm, setAlgorithm] = useState(null);
@@ -11,6 +13,7 @@ const PageReplacementVisualizer = () => {
     fifo: "blue",
     lru: "purple",
     lfu: "green",
+    optimal: "amber"
   };
 
   // Get current theme color
@@ -44,6 +47,15 @@ const PageReplacementVisualizer = () => {
       disadvantages:
         "May retain pages that were frequently used in the past but are no longer needed. Requires additional overhead to maintain frequency counters.",
     },
+    optimal: {
+      title: "Optimal (Belady's Algorithm)",
+      description:
+        "The Optimal page replacement algorithm replaces the page that will not be used for the longest period of time in the future. It requires knowledge of future page requests, making it impossible to implement in real systems, but serves as a theoretical benchmark.",
+      advantages:
+        "Guarantees the lowest possible page fault rate and is immune to Belady's Anomaly. Provides a theoretical upper bound on performance.",
+      disadvantages:
+        "Not implementable in real systems as it requires perfect knowledge of future page requests. Only useful as a benchmark for other algorithms.",
+    }
   };
 
   return (
@@ -95,6 +107,18 @@ const PageReplacementVisualizer = () => {
             >
               Least Frequently Used (LFU)
             </button>
+            
+            <button
+              onClick={() => setAlgorithm("optimal")}
+              className={`px-6 py-3 rounded-lg font-medium transition-all 
+                ${
+                  algorithm === "optimal"
+                    ? "bg-amber-600 text-white shadow-md"
+                    : "bg-white text-gray-700 border border-gray-300 hover:bg-amber-50"
+                }`}
+            >
+              Optimal
+            </button>
           </div>
         </div>
 
@@ -122,6 +146,7 @@ const PageReplacementVisualizer = () => {
         {algorithm === "fifo" && <FIFOPageReplacement />}
         {algorithm === "lru" && <LRUPageReplacement />}
         {algorithm === "lfu" && <LFUPageReplacement />}
+        {algorithm === "optimal" && <OptimalPageReplacement />}
 
         {/* Default message when no algorithm is selected */}
         {!algorithm && (

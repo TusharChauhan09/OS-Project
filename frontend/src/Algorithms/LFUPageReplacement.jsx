@@ -388,12 +388,6 @@ const LFUPageReplacement = () => {
 };
 
 export default LFUPageReplacement;
-
-  
-  
-  
-  
-  
   `;
 
   const getPages = () =>
@@ -557,6 +551,80 @@ export default LFUPageReplacement;
             </div>
           </div>
         )}
+      </div>
+    );
+  };
+
+  // Render page table
+  const displayPageTable = () => {
+    if (!matrix.length || matrix.length <= 1) return null;
+
+    // Get all steps except the initial empty state
+    const tableData = matrix.slice(1);
+
+    return (
+      <div className="mt-8 overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">
+          <thead>
+            <tr className="bg-green-700 text-white">
+              <th className="py-2 px-4 border-b">Step</th>
+              <th className="py-2 px-4 border-b">Page</th>
+              <th className="py-2 px-4 border-b">Memory Frames</th>
+              <th className="py-2 px-4 border-b">Frequencies</th>
+              <th className="py-2 px-4 border-b">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tableData.map((row, index) => (
+              <tr 
+                key={index} 
+                className={`
+                  ${index < step ? "bg-gray-50" : ""}
+                  ${index === step - 1 ? "bg-blue-50" : ""}
+                `}
+              >
+                <td className="py-2 px-4 border-b text-center">{row.step}</td>
+                <td className="py-2 px-4 border-b text-center font-medium">{row.page}</td>
+                <td className="py-2 px-4 border-b text-center">
+                  <div className="flex justify-center space-x-2">
+                    {row.frames.map((frame, i) => (
+                      <div 
+                        key={i}
+                        className={`w-8 h-8 flex items-center justify-center text-sm border 
+                          ${frame === "-" 
+                            ? "border-gray-300 text-gray-400" 
+                            : "border-blue-500 bg-blue-50 text-blue-800"
+                          }`}
+                      >
+                        {frame}
+                      </div>
+                    ))}
+                  </div>
+                </td>
+                <td className="py-2 px-4 border-b text-center">
+                  <div className="flex justify-center space-x-2">
+                    {Object.entries(row.freqs).map(([page, freq], i) => (
+                      <div key={i} className="text-xs">
+                        {page}:{freq}
+                      </div>
+                    ))}
+                  </div>
+                </td>
+                <td className="py-2 px-4 border-b text-center">
+                  <span 
+                    className={`px-2 py-1 rounded text-xs font-medium
+                      ${row.fault 
+                        ? "bg-red-100 text-red-700" 
+                        : "bg-green-100 text-green-700"
+                      }`}
+                  >
+                    {row.fault ? "Page Fault" : "Page Hit"}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     );
   };
@@ -729,6 +797,12 @@ export default LFUPageReplacement;
               {displayFrames()}
             </div>
             {drawSequence()}
+
+            {/* Page Table */}
+            <div className="mt-12 bg-white rounded-lg p-4 shadow-md">
+              <h3 className="text-lg font-semibold mb-4 text-center">Page Table</h3>
+              {displayPageTable()}
+            </div>
           </div>
         ) : (
           <div className="text-center py-12 text-gray-500">
@@ -746,9 +820,7 @@ export default LFUPageReplacement;
             onClick={() => setShowCode(!showCode)}
             className="flex items-center gap-2 px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-900 transition-colors duration-200"
           >
-            <span className="material-icons">
-              {showCode ? " " : " "}
-            </span>
+            <span className="material-icons">{showCode ? " " : " "}</span>
             {showCode ? "Hide Code" : "Show Code"}
           </button>
         </div>

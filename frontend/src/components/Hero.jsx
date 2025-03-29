@@ -16,7 +16,7 @@ const Hero = () => {
       {/* Content */}
       <div className="relative z-10 max-w-4xl mx-auto">
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-          About Algo-Chunk
+        Page Replacement Algorithm Visualizer
         </h1>
 
         <p className="text-lg md:text-xl text-white/90 mb-12 max-w-2xl mx-auto">
@@ -30,16 +30,16 @@ const Hero = () => {
             to="/algorithm"
             className="px-8 py-3 bg-white text-[#01216B] rounded-md font-medium hover:bg-blue-50 transition-colors duration-200 flex items-center justify-center gap-2"
           >
-            <span className="material-icons">menu_book</span>
-            Explore Algorithms
+            <span className="material-icons">Algorithms</span>
+            
           </Link>
 
           <Link
-            to="/algorithm"
+            to="https://github.com/TusharChauhan09/OS-Project"
             className="px-8 py-3 bg-[#1e3a8a] text-white rounded-md font-medium hover:bg-[#2b4a9a] transition-colors duration-200 border border-blue-400 flex items-center justify-center gap-2"
           >
-            <span className="material-icons">code</span>
-            View Interactive Demo
+            <span className="material-icons">Get Repository</span>
+            
           </Link>
         </div>
       </div>

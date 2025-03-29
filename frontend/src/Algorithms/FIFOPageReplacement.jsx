@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import CodeSnippet from '../components/CodeSnippet';
+import React, { useState, useEffect } from "react";
+import CodeSnippet from "../components/CodeSnippet";
 
 const FIFOPageReplacement = () => {
   // State management
   const [frames, setFrames] = useState(3);
-  const [pageSequence, setPageSequence] = useState('1,2,3,4,1,2,5,1,2,3,4,5');
+  const [pageSequence, setPageSequence] = useState("1,2,3,4,1,2,5,1,2,3,4,5");
   const [speed, setSpeed] = useState(1000);
   const [simulationMatrix, setSimulationMatrix] = useState([]);
   const [faultCount, setFaultCount] = useState(0);
@@ -16,7 +16,10 @@ const FIFOPageReplacement = () => {
 
   // Parse page sequence
   const getPageSequence = () => {
-    return pageSequence.split(',').map(page => page.trim()).filter(page => page !== '');
+    return pageSequence
+      .split(",")
+      .map((page) => page.trim())
+      .filter((page) => page !== "");
   };
 
   const code = `
@@ -316,8 +319,7 @@ const FIFOPageReplacement = () => {
 export default FIFOPageReplacement;
   
   `;
- 
-
+  
   // Reset simulation
   const resetSimulation = () => {
     setSimulationMatrix([]);
@@ -338,14 +340,14 @@ export default FIFOPageReplacement;
     let pageHits = 0;
 
     // Initialize matrix with empty frames
-    const initialState = Array(frames).fill('-');
+    const initialState = Array(frames).fill("-");
     matrix.push({
       step: 0,
       page: null,
       frames: [...initialState],
       queue: [],
       isFault: false,
-      isHit: false
+      isHit: false,
     });
 
     pages.forEach((page, index) => {
@@ -364,9 +366,9 @@ export default FIFOPageReplacement;
         isFault = true;
         pageFaults++;
 
-        if (currentFrames.includes('-')) {
+        if (currentFrames.includes("-")) {
           // If there's an empty frame then use it
-          const emptyIndex = currentFrames.indexOf('-');
+          const emptyIndex = currentFrames.indexOf("-");
           currentFrames[emptyIndex] = page;
           currentQueue.push(page);
         } else {
@@ -385,7 +387,7 @@ export default FIFOPageReplacement;
         frames: [...currentFrames],
         queue: [...currentQueue],
         isFault,
-        isHit
+        isHit,
       });
     });
 
@@ -409,7 +411,7 @@ export default FIFOPageReplacement;
 
     if (isRunning && currentStep < simulationMatrix.length - 1) {
       timer = setTimeout(() => {
-        setCurrentStep(prev => prev + 1);
+        setCurrentStep((prev) => prev + 1);
       }, speed);
     } else if (currentStep >= simulationMatrix.length - 1 && isRunning) {
       setIsComplete(true);
@@ -421,20 +423,27 @@ export default FIFOPageReplacement;
 
   // Render frames
   const renderFrames = () => {
-    if (simulationMatrix.length === 0 || currentStep >= simulationMatrix.length) {
+    if (
+      simulationMatrix.length === 0 ||
+      currentStep >= simulationMatrix.length
+    ) {
       return null;
     }
 
     const currentState = simulationMatrix[currentStep];
-    
+
     return (
       <div className="grid grid-cols-1 gap-6 w-full">
         <div className="flex justify-center items-center space-x-4">
           {currentState.frames.map((frame, idx) => (
-            <div 
+            <div
               key={idx}
               className={`w-16 h-16 flex items-center justify-center text-xl font-semibold border-2 
-                ${frame === '-' ? 'border-gray-300 text-gray-400' : 'border-blue-500 bg-blue-100 text-blue-800'}`}
+                ${
+                  frame === "-"
+                    ? "border-gray-300 text-gray-400"
+                    : "border-blue-500 bg-blue-100 text-blue-800"
+                }`}
             >
               {frame}
             </div>
@@ -442,9 +451,15 @@ export default FIFOPageReplacement;
         </div>
         {currentStep > 0 && (
           <div className="flex justify-center items-center">
-            <div className={`text-lg font-semibold px-4 py-2 rounded-lg 
-              ${currentState.isFault ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
-              {currentState.isFault ? 'Page Fault' : 'Page Hit'}
+            <div
+              className={`text-lg font-semibold px-4 py-2 rounded-lg 
+              ${
+                currentState.isFault
+                  ? "bg-red-100 text-red-700"
+                  : "bg-green-100 text-green-700"
+              }`}
+            >
+              {currentState.isFault ? "Page Fault" : "Page Hit"}
             </div>
           </div>
         )}
@@ -459,16 +474,20 @@ export default FIFOPageReplacement;
     }
 
     const pages = getPageSequence();
-    
+
     return (
       <div className="flex flex-wrap justify-center gap-2 mt-4">
         {pages.map((page, idx) => (
-          <div 
-            key={idx} 
+          <div
+            key={idx}
             className={`w-10 h-10 flex items-center justify-center text-sm border 
-              ${idx === currentStep - 1 ? 'bg-blue-500 text-white border-blue-700' : 
-                idx < currentStep - 1 ? 'bg-gray-200 text-gray-700 border-gray-300' : 
-                'bg-white text-gray-700 border-gray-300'}`}
+              ${
+                idx === currentStep - 1
+                  ? "bg-blue-500 text-white border-blue-700"
+                  : idx < currentStep - 1
+                  ? "bg-gray-200 text-gray-700 border-gray-300"
+                  : "bg-white text-gray-700 border-gray-300"
+              }`}
           >
             {page}
           </div>
@@ -480,10 +499,10 @@ export default FIFOPageReplacement;
   // Render results
   const renderResults = () => {
     if (!isComplete && simulationMatrix.length === 0) return null;
-    
+
     const hitRate = (hitCount / (hitCount + faultCount)) * 100 || 0;
     const faultRate = (faultCount / (hitCount + faultCount)) * 100 || 0;
-    
+
     return (
       <div className="bg-white rounded-lg p-4 shadow-md">
         <h3 className="text-lg font-semibold mb-2">Results</h3>
@@ -491,25 +510,106 @@ export default FIFOPageReplacement;
           <div>
             <p className="text-sm text-gray-600">Page Hits: {hitCount}</p>
             <div className="w-full bg-gray-200 rounded-full h-2.5 mt-1">
-              <div className="bg-green-500 h-2.5 rounded-full" style={{ width: `${hitRate}%` }}></div>
+              <div
+                className="bg-green-500 h-2.5 rounded-full"
+                style={{ width: `${hitRate}%` }}
+              ></div>
             </div>
             <p className="text-xs text-gray-500 mt-1">{hitRate.toFixed(2)}%</p>
           </div>
           <div>
             <p className="text-sm text-gray-600">Page Faults: {faultCount}</p>
             <div className="w-full bg-gray-200 rounded-full h-2.5 mt-1">
-              <div className="bg-red-500 h-2.5 rounded-full" style={{ width: `${faultRate}%` }}></div>
+              <div
+                className="bg-red-500 h-2.5 rounded-full"
+                style={{ width: `${faultRate}%` }}
+              ></div>
             </div>
-            <p className="text-xs text-gray-500 mt-1">{faultRate.toFixed(2)}%</p>
+            <p className="text-xs text-gray-500 mt-1">
+              {faultRate.toFixed(2)}%
+            </p>
           </div>
         </div>
       </div>
     );
   };
 
+  // Add this new render function before the return statement
+  const renderPageTable = () => {
+    if (simulationMatrix.length <= 1) return null;
+
+    return (
+      <div className="overflow-x-auto mt-8 bg-white rounded-lg shadow-md p-4">
+        <h3 className="text-lg font-semibold mb-4">Page Replacement Table</h3>
+        <table className="min-w-full border border-gray-200 rounded-lg">
+          <thead>
+            <tr className="bg-blue-50">
+              <th className="px-4 py-2 border-b text-blue-800">Step</th>
+              <th className="px-4 py-2 border-b text-blue-800">
+                Page Reference
+              </th>
+              {Array(frames)
+                .fill()
+                .map((_, idx) => (
+                  <th key={idx} className="px-4 py-2 border-b text-blue-800">
+                    Frame {idx + 1}
+                  </th>
+                ))}
+              <th className="px-4 py-2 border-b text-blue-800">FIFO Queue</th>
+              <th className="px-4 py-2 border-b text-blue-800">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {simulationMatrix.slice(1).map((state, idx) => (
+              <tr
+                key={idx}
+                className={`${
+                  idx === currentStep - 1
+                    ? "bg-blue-50"
+                    : idx % 2 === 0
+                    ? "bg-gray-50"
+                    : "bg-white"
+                }`}
+              >
+                <td className="px-4 py-2 border-b text-center">{state.step}</td>
+                <td className="px-4 py-2 border-b text-center font-semibold text-blue-700">
+                  {state.page}
+                </td>
+                {state.frames.map((frame, frameIdx) => (
+                  <td
+                    key={frameIdx}
+                    className={`px-4 py-2 border-b text-center ${
+                      frame === state.page && idx === currentStep - 1
+                        ? "bg-blue-100 font-semibold"
+                        : ""
+                    }`}
+                  >
+                    {frame}
+                  </td>
+                ))}
+                <td className="px-4 py-2 border-b text-center font-mono text-sm">
+                  [{state.queue.join(" → ")}]
+                </td>
+                <td
+                  className={`px-4 py-2 border-b text-center font-semibold ${
+                    state.isFault ? "text-red-600" : "text-green-600"
+                  }`}
+                >
+                  {state.isFault ? "Page Fault" : "Page Hit"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
   return (
     <div className="max-w-5xl mx-auto p-6 bg-gray-50 rounded-xl shadow-lg">
-      <h2 className="text-2xl font-bold text-center mb-6 text-blue-800">FIFO Page Replacement Algorithm</h2>
+      <h2 className="text-2xl font-bold text-center mb-6 text-blue-800">
+        FIFO Page Replacement Algorithm
+      </h2>
 
       {/* Configuration */}
       <div className="bg-white rounded-lg p-6 shadow-md mb-6">
@@ -517,10 +617,12 @@ export default FIFOPageReplacement;
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Number of Frames</label>
-            <input 
-              type="number" 
-              min="1" 
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Number of Frames
+            </label>
+            <input
+              type="number"
+              min="1"
               max="10"
               value={frames}
               onChange={(e) => setFrames(parseInt(e.target.value))}
@@ -530,9 +632,11 @@ export default FIFOPageReplacement;
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Page Reference Sequence</label>
-            <input 
-              type="text" 
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Page Reference Sequence
+            </label>
+            <input
+              type="text"
               value={pageSequence}
               onChange={(e) => setPageSequence(e.target.value)}
               disabled={isRunning}
@@ -542,11 +646,13 @@ export default FIFOPageReplacement;
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Animation Speed (ms)</label>
-            <input 
-              type="range" 
-              min="200" 
-              max="2000" 
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Animation Speed (ms)
+            </label>
+            <input
+              type="range"
+              min="200"
+              max="2000"
               step="100"
               value={speed}
               onChange={(e) => setSpeed(parseInt(e.target.value))}
@@ -561,19 +667,23 @@ export default FIFOPageReplacement;
           <button
             onClick={runAnimation}
             disabled={isRunning || getPageSequence().length === 0}
-            className={`px-4 py-2 rounded-md font-medium ${isRunning 
-              ? 'bg-gray-300 text-gray-700 cursor-not-allowed' 
-              : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+            className={`px-4 py-2 rounded-md font-medium ${
+              isRunning
+                ? "bg-gray-300 text-gray-700 cursor-not-allowed"
+                : "bg-blue-600 text-white hover:bg-blue-700"
+            }`}
           >
-            {isComplete ? 'Run Again' : 'Run Simulation'}
+            {isComplete ? "Run Again" : "Run Simulation"}
           </button>
-          
+
           <button
             onClick={resetSimulation}
             disabled={isRunning || simulationMatrix.length === 0}
-            className={`px-4 py-2 rounded-md font-medium ${isRunning || simulationMatrix.length === 0
-              ? 'bg-gray-300 text-gray-700 cursor-not-allowed' 
-              : 'bg-red-600 text-white hover:bg-red-700'}`}
+            className={`px-4 py-2 rounded-md font-medium ${
+              isRunning || simulationMatrix.length === 0
+                ? "bg-gray-300 text-gray-700 cursor-not-allowed"
+                : "bg-red-600 text-white hover:bg-red-700"
+            }`}
           >
             Reset
           </button>
@@ -583,18 +693,22 @@ export default FIFOPageReplacement;
       {/* Visualization */}
       <div className="bg-white rounded-lg p-6 shadow-md mb-6">
         <h3 className="text-lg font-semibold mb-4">Visualization</h3>
-        
+
         {simulationMatrix.length > 0 ? (
           <div>
             <div className="mb-6">
               {currentStep > 0 && (
                 <p className="text-center mb-2 text-gray-700">
-                  Current Page: <span className="font-bold text-blue-700">{simulationMatrix[currentStep].page}</span>
+                  Current Page:{" "}
+                  <span className="font-bold text-blue-700">
+                    {simulationMatrix[currentStep].page}
+                  </span>
                 </p>
               )}
               {renderFrames()}
             </div>
             {renderSequence()}
+            {renderPageTable()}
           </div>
         ) : (
           <div className="text-center py-12 text-gray-500">
@@ -606,9 +720,7 @@ export default FIFOPageReplacement;
       {/* Results */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {renderResults()}
-        
       </div>
-
 
       <div className="p-6">
         <div className="flex justify-center mb-4">

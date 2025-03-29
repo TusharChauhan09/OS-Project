@@ -72,7 +72,7 @@ const LRUPageReplacement = () => {
       const currentFrames = [...matrix[matrix.length - 1].frames];
       let isFault = false;
       let isHit = false;
-
+      
       
       const updatedRecentlyUsed = { ...recentlyUsed };
 
@@ -94,21 +94,21 @@ const LRUPageReplacement = () => {
           
           let leastRecentlyUsed = null;
           let oldestTime = Infinity;
-
+          
           for (const frameItem of currentFrames) {
             if (updatedRecentlyUsed[frameItem] < oldestTime) {
               oldestTime = updatedRecentlyUsed[frameItem];
               leastRecentlyUsed = frameItem;
             }
           }
-
+          
           const replaceIndex = currentFrames.indexOf(leastRecentlyUsed);
           currentFrames[replaceIndex] = page;
         }
       }
-
+      
       updatedRecentlyUsed[page] = index;
-
+      
       matrix.push({
         step: index + 1,
         page,
@@ -158,13 +158,13 @@ const LRUPageReplacement = () => {
     }
 
     const currentState = simulationMatrix[currentStep];
-
+    
     return (
       <div className="grid grid-cols-1 gap-6 w-full">
         <div className="flex justify-center items-center space-x-4">
           {currentState.frames.map((frame, idx) => (
             <div key={idx} className="relative">
-              <div
+              <div 
                 className={'w-16 h-16 flex items-center justify-center text-xl font-semibold border-2 
               >
                 {frame}
@@ -196,12 +196,12 @@ const LRUPageReplacement = () => {
     }
 
     const pages = getPageSequence();
-
+    
     return (
       <div className="flex flex-wrap justify-center gap-2 mt-8">
         {pages.map((page, idx) => (
-          <div
-            key={idx}
+          <div 
+            key={idx} 
             className={'w-10 h-10 flex items-center justify-center text-sm border }
           >
             {page}
@@ -213,10 +213,10 @@ const LRUPageReplacement = () => {
 
   const renderResults = () => {
     if (!isComplete && simulationMatrix.length === 0) return null;
-
+    
     const hitRate = (hitCount / (hitCount + faultCount)) * 100 || 0;
     const faultRate = (faultCount / (hitCount + faultCount)) * 100 || 0;
-
+    
     return (
       <div className="bg-white rounded-lg p-4 shadow-md">
         <h3 className="text-lg font-semibold mb-2">Results</h3>
@@ -262,9 +262,9 @@ const LRUPageReplacement = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Number of Frames
             </label>
-            <input
-              type="number"
-              min="1"
+            <input 
+              type="number" 
+              min="1" 
               max="10"
               value={frames}
               onChange={(e) => setFrames(parseInt(e.target.value))}
@@ -277,8 +277,8 @@ const LRUPageReplacement = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Page Reference Sequence
             </label>
-            <input
-              type="text"
+            <input 
+              type="text" 
               value={pageSequence}
               onChange={(e) => setPageSequence(e.target.value)}
               disabled={isRunning}
@@ -291,10 +291,10 @@ const LRUPageReplacement = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Animation Speed (ms)
             </label>
-            <input
-              type="range"
-              min="200"
-              max="2000"
+            <input 
+              type="range" 
+              min="200" 
+              max="2000" 
               step="100"
               value={speed}
               onChange={(e) => setSpeed(parseInt(e.target.value))}
@@ -313,7 +313,7 @@ const LRUPageReplacement = () => {
           >
             {isComplete ? "Run Again" : "Run Simulation"}
           </button>
-
+          
           <button
             onClick={resetSimulation}
             disabled={isRunning || simulationMatrix.length === 0}
@@ -326,7 +326,7 @@ const LRUPageReplacement = () => {
 
       <div className="bg-white rounded-lg p-6 shadow-md mb-6">
         <h3 className="text-lg font-semibold mb-4">Visualization</h3>
-
+        
         {simulationMatrix.length > 0 ? (
           <div>
             <div className="mb-8">
@@ -574,6 +574,90 @@ export default LRUPageReplacement;
     );
   };
 
+  const renderPageTable = () => {
+    if (simulationMatrix.length <= 1) return null;
+
+    const formatLastUsed = (recentlyUsed, frames) => {
+      return frames
+        .map((frame) => {
+          if (frame === "-") return "";
+          return `${frame}→${recentlyUsed[frame]}`;
+        })
+        .filter(Boolean)
+        .join(" | ");
+    };
+
+    return (
+      <div className="overflow-x-auto mt-8 bg-white rounded-lg shadow-md p-4">
+        <h3 className="text-lg font-semibold mb-4">Page Replacement Table</h3>
+        <table className="min-w-full border border-gray-200 rounded-lg">
+          <thead>
+            <tr className="bg-purple-50">
+              <th className="px-4 py-2 border-b text-purple-800">Step</th>
+              <th className="px-4 py-2 border-b text-purple-800">
+                Page Reference
+              </th>
+              {Array(frames)
+                .fill()
+                .map((_, idx) => (
+                  <th key={idx} className="px-4 py-2 border-b text-purple-800">
+                    Frame {idx + 1}
+                  </th>
+                ))}
+              <th className="px-4 py-2 border-b text-purple-800">
+                Last Access Time
+              </th>
+              <th className="px-4 py-2 border-b text-purple-800">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {simulationMatrix.slice(1).map((state, idx) => (
+              <tr
+                key={idx}
+                className={`${
+                  idx === currentStep - 1
+                    ? "bg-purple-50"
+                    : idx % 2 === 0
+                    ? "bg-gray-50"
+                    : "bg-white"
+                }`}
+              >
+                <td className="px-4 py-2 border-b text-center">{state.step}</td>
+                <td className="px-4 py-2 border-b text-center font-semibold text-purple-700">
+                  {state.page}
+                </td>
+                {state.frames.map((frame, frameIdx) => (
+                  <td
+                    key={frameIdx}
+                    className={`px-4 py-2 border-b text-center ${
+                      frame === state.page && idx === currentStep - 1
+                        ? "bg-purple-100 font-semibold"
+                        : ""
+                    }`}
+                  >
+                    {frame}
+                  </td>
+                ))}
+                <td className="px-4 py-2 border-b text-center font-mono text-sm">
+                  <div className="flex items-center justify-center space-x-2">
+                    {formatLastUsed(state.recentlyUsed, state.frames)}
+                  </div>
+                </td>
+                <td
+                  className={`px-4 py-2 border-b text-center font-semibold ${
+                    state.isFault ? "text-red-600" : "text-green-600"
+                  }`}
+                >
+                  {state.isFault ? "Page Fault" : "Page Hit"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
   const renderResults = () => {
     if (!isComplete && simulationMatrix.length === 0) return null;
 
@@ -712,6 +796,7 @@ export default LRUPageReplacement;
               {renderFrames()}
             </div>
             {renderSequence()}
+            {renderPageTable()}
           </div>
         ) : (
           <div className="text-center py-12 text-gray-500">

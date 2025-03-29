@@ -10,14 +10,14 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Brand Section */}
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold">Algo-Chunk</h2>
+            <h2 className="text-2xl font-bold">Page Replacement Algorithm Visualizer</h2>
             <p className="text-gray-300 text-sm max-w-md">
               A visual simulator demonstrating page replacement algorithms for
               virtual memory management.
             </p>
             <div className="flex space-x-4 pt-2">
               <a
-                href="https://github.com/yourusername"
+                href="https://github.com/tusharchauhan09"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-white transition-colors"
@@ -25,7 +25,7 @@ const Footer = () => {
                 <FaGithub className="w-6 h-6" />
               </a>
               <a
-                href="mailto:contact@example.com"
+                href="mailto:tusharchauhan00912@gmail.com"
                 className="text-gray-300 hover:text-white transition-colors"
               >
                 <HiMail className="w-6 h-6" />
@@ -39,7 +39,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <Link
-                  to="/"
+                  to="/algorithm"
                   className="text-gray-300 hover:text-white transition-colors"
                 >
                   Home
@@ -47,7 +47,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/about"
+                  to="/"
                   className="text-gray-300 hover:text-white transition-colors"
                 >
                   About
@@ -55,7 +55,7 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="https://github.com/yourusername/algo-chunk"
+                  href="https://github.com/TusharChauhan09/OS-Project"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-300 hover:text-white transition-colors"
@@ -81,7 +81,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="border-t border-blue-800 mt-12 pt-8 text-center text-gray-300">
-          <p>© {new Date().getFullYear()} Algo-Chunk. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Tushar Chauhan </p>
         </div>
       </div>
     </footer>

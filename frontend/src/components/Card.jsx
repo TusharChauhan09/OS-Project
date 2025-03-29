@@ -12,7 +12,7 @@ const Card = ({
   email = "mailto:example@email.com",
 }) => {
   return (
-    <div className="max-w-sm mx-auto">
+    <div className="max-w-sm mx-10 mb-10">
       <div className="bg-[#01216B] rounded-2xl shadow-2xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
         {/* Image Container */}
         <div className="relative h-64 overflow-hidden">

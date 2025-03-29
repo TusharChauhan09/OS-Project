@@ -1,6 +1,5 @@
 import React from "react";
 
-
 const Difference = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -37,8 +36,11 @@ const Difference = () => {
                 <th className="px-6 py-4 text-left text-lg font-semibold text-purple-700 bg-purple-50">
                   LRU
                 </th>
-                <th className="px-6 py-4 text-left text-lg font-semibold text-green-700 bg-green-50 rounded-tr-lg">
+                <th className="px-6 py-4 text-left text-lg font-semibold text-green-700 bg-green-50">
                   LFU
+                </th>
+                <th className="px-6 py-4 text-left text-lg font-semibold text-red-700 bg-red-50 rounded-tr-lg">
+                  Optimal
                 </th>
               </tr>
             </thead>
@@ -65,6 +67,12 @@ const Difference = () => {
                     Replaces least frequently used page
                   </div>
                 </td>
+                <td className="px-6 py-4 text-red-800">
+                  <div className="flex items-center">
+                    <span className="w-2 h-2 bg-red-400 rounded-full mr-2"></span>
+                    Replaces page that won't be used for the longest time
+                  </div>
+                </td>
               </tr>
               <tr className="hover:bg-gray-50 transition-colors duration-200">
                 <td className="px-6 py-4 font-medium text-gray-900">
@@ -73,6 +81,7 @@ const Difference = () => {
                 <td className="px-6 py-4">Simple queue</td>
                 <td className="px-6 py-4">Requires access history</td>
                 <td className="px-6 py-4">Requires frequency counters</td>
+                <td className="px-6 py-4">Requires future knowledge</td>
               </tr>
               <tr className="hover:bg-gray-50 transition-colors duration-200">
                 <td className="px-6 py-4 font-medium text-gray-900">
@@ -93,12 +102,18 @@ const Difference = () => {
                     Good for stable access patterns
                   </span>
                 </td>
+                <td className="px-6 py-4">
+                  <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs">
+                    Optimal under perfect knowledge
+                  </span>
+                </td>
               </tr>
               <tr className="hover:bg-gray-50 transition-colors duration-200">
                 <td className="px-6 py-4 font-medium text-gray-900">
                   Belady's Anomaly
                 </td>
                 <td className="px-6 py-4 text-red-600">Susceptible</td>
+                <td className="px-6 py-4 text-green-600">Not susceptible</td>
                 <td className="px-6 py-4 text-green-600">Not susceptible</td>
                 <td className="px-6 py-4 text-green-600">Not susceptible</td>
               </tr>
@@ -130,12 +145,19 @@ const Difference = () => {
                     <span className="ml-2">Medium to High</span>
                   </div>
                 </td>
+                <td className="px-6 py-4">
+                  <div className="flex items-center">
+                    <div className="w-16 h-2 bg-blue-200 rounded-full">
+                      <div className="w-10 h-2 bg-blue-500 rounded-full"></div>
+                    </div>
+                    <span className="ml-2">High</span>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-
     </div>
   );
 };
